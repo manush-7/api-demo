@@ -1,0 +1,55 @@
+service: api-demo
+app: db-extraction-to-s3
+frameworkVersion: '2'
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+  stage: dev
+  region: us-west-2
+  memorySize: 128
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 's3:ListBucket'
+            - 's3:PutObject'
+            - 's3:GetObject'
+          Resource:
+              - 'arn:aws:s3:::paccar-test-mysql-to-s3'
+              - 'arn:aws:s3:::paccar-test-mysql-to-s3/*'
+resources:
+  Resources:
+    ApiGatewayAuthorizer:
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        Name: cognito_auth_dev
+        IdentitySource: method.request.header.Authorization
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        Type: COGNITO_USER_POOLS
+        ProviderARNs: 
+          - arn:aws:cognito-idp:us-west-2:346234640958:userpool/us-west-2_2jWrC1rLg
+    
+functions:
+  rdstos3:
+    handler: api/handler.extract
+    events:
+      - http:
+          method: get
+          path: rdstos3
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  s3tords:
+    handler: api/lambda_function.lambda_handler
+    events:
+      - http:
+          method: get
+          path: s3tords
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
