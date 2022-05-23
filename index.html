@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Immersion Day Demo </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<style>
+  img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 47px;
+  padding: 60px;
+}
+   .container {
+  /* max-width: 9000px; */
+  /* background: rgb(80, 180, 251); */
+  padding: 70px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 150px;
+}
+  .btn-btn-default {
+  max-width: 1000px;
+  margin-top: 45px;
+  padding: 7px;
+}
+  .form-group {
+  max-width: 1000px;
+  padding: 20px;
+}
+  .form-control {
+  display: flex;
+  padding: 20px;
+}
+</style>
+<body style="background-image: linear-gradient(white, rgb(86, 86, 185));">
+<img src="image.png" alt="ScaleCapacity" style="width:40%">
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label for="email">Text</label>
+        <input type="text" class="form-control" id="bucket_name" />
+        <label for="email">Bucket Name</label>
+    </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group" padding=10px>
+        <label for="email"></label>
+        <input type="text"  class="form-control" id="file_name" />
+        <label for="email">File Name</label>
+    </div>
+    </div>
+    <div class="col-sm-3">
+      <button class="btn-btn-default" onClick="submitForm()">Submit</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label for="email">Text</label>
+        <input type="date" class="form-control" id="date" />
+        <label for="email">Date</label>
+    </div>
+    </div>
+    <div class="col-sm-3 ">
+      <button class="btn-btn-default" onClick="submitDateForm()">Submit</button>
+    </div>
+  </div>
+</div>
+<script>
+  function submitDateForm(){
+    var date = $('#date').val();
+  }
+  function submitForm() {
+    var bucketName = $('#bucket_name').val();
+    var fileName = $('#file_name').val();
+    var data = window.location.href;
+    var parameter = data.split("#");
+    var res = parameter[1].split("&");
+    var tokenData = res[0].split("id_token=")[1];
+    console.log("tokenData", tokenData);
+        $.ajax({
+        url: "https://3fzkedpbb1.execute-api.us-west-2.amazonaws.com/dev/rdstos3?date=test",
+        headers: {"Authorization": "Bearer " + tokenData},
+        crossDomain: true,
+              contentType:'application/json',
+              secure: true,
+        type: "GET",
+        success: function(data){
+        console.log('data', data);
+      }
+    });
+  }
+    
+
+$.ajax({
+          url: "https://3fzkedpbb1.execute-api.us-west-2.amazonaws.com/dev/rdstos3?date=test",
+          type: 'GET',
+          cors: false,
+          contentType:'application/json',
+          secure: true,
+          crossDomain: true,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader ("Authorization", "Bearer " + tokenData);
+          },
+          success: function (data){
+            console.log(data);
+          }
+      })
+</script>
+</body>
+</html>
