@@ -57,35 +57,6 @@ Parameters:
     Default: 0.0.0.0/0
     AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
     Description: CIDR notation access for RDS Security group
-Outputs:
-  S3BucketURL:
-    Value: !GetAtt 
-      - S3Bucket
-      - WebsiteURL
-    Description: Immersion Day S3
-  S3BucketSecureURL:
-    Value: !Join 
-      - ''
-      - - 'https://'
-        - !GetAtt 
-          - S3Bucket
-          - DomainName
-        - /index.html
-    Description: Secure URL S3
-  RDSHostname:
-    Value: !Join 
-      - ''
-      - - 'RDS hostname: '
-        - !GetAtt 
-          - RDS
-          - Endpoint.Address
-        - ':'
-        - !GetAtt 
-          - RDS
-          - Endpoint.Port
-        - /
-        - !Ref DBName
-    Description: RDS DB Address and port
 Resources:
   VPC:
     Type: 'AWS::EC2::VPC'
@@ -301,3 +272,38 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: 'Access S3 bucket content only through CloudFront'
     Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+Outputs:
+  S3BucketURL:
+    Value: !GetAtt 
+      - S3Bucket
+      - WebsiteURL
+    Description: Immersion Day S3
+  S3BucketSecureURL:
+    Value: !Join 
+      - ''
+      - - 'https://'
+        - !GetAtt 
+          - S3Bucket
+          - DomainName
+        - /index.html
+    Description: Secure URL S3
+  RDSHostname:
+    Value: !Join 
+      - ''
+      - - 'RDS hostname: '
+        - !GetAtt 
+          - RDS
+          - Endpoint.Address
+        - ':'
+        - !GetAtt 
+          - RDS
+          - Endpoint.Port
+        - /
+        - !Ref DBName
+    Description: RDS DB Address and port
+  CfDistributionId:
+    Description: 'Id for our cloudfront distribution'
+    Value: !Ref CfDistribution
+  CfDistributionDomainName:
+    Description: 'Domain name for our cloudfront distribution'
+    Value: !GetAtt CfDistribution.DomainName
