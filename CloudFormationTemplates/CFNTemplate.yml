@@ -1,0 +1,335 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  # S3BucketName:
+  #   Type: String
+  #   Description: Name of S3 Bucket that will be created
+  DBName:
+    Default: AGTtest
+    Description: The database name
+    Type: String
+    MinLength: '1'
+    MaxLength: '64'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+  DBUser:
+    NoEcho: 'true'
+    Description: The database admin account username
+    Type: String
+    MinLength: '1'
+    MaxLength: '16'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+  DBPassword:
+    NoEcho: 'true'
+    Description: The database admin account password
+    Type: String
+    MinLength: '8'
+    MaxLength: '41'
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: must contain only alphanumeric characters.
+  DBInstanceClass:
+    Type: String
+    Default: db.t3.micro
+    Description: Instance class of RDS
+    AllowedValues:
+      - db.t3.micro
+      - db.t2.small
+      - db.t3.small
+      - db.t2.medium
+      - db.t3.medium
+    ConstraintDescription: must be a valid EC2 instance type.
+  DBEngine:
+    Type: String
+    Default: mysql
+    Description: Engine that will RDS instance run
+    AllowedValues:
+      - mysql
+      - mariadb
+      - aurora
+      - aurora-mysql
+  DBEngineVersion:
+    Type: String
+    Default: 8.0.20
+    Description: Version of RDS engine
+  RDSParamGroupFamily:
+    Type: String
+    Default: mysql8.0
+    Description: Parameter group family of RDS instance
+  RDSSGCidr:
+    Type: String
+    Default: 0.0.0.0/0
+    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
+    Description: CIDR notation access for RDS Security group
+Outputs:
+  S3BucketURL:
+    Value: !GetAtt 
+      - S3Bucket
+      - WebsiteURL
+    Description: Immersion Day S3
+  S3BucketSecureURL:
+    Value: !Join 
+      - ''
+      - - 'https://'
+        - !GetAtt 
+          - S3Bucket
+          - DomainName
+        - /index.html
+    Description: Secure URL S3
+  RDSHostname:
+    Value: !Join 
+      - ''
+      - - 'RDS hostname: '
+        - !GetAtt 
+          - RDS
+          - Endpoint.Address
+        - ':'
+        - !GetAtt 
+          - RDS
+          - Endpoint.Port
+        - /
+        - !Ref DBName
+    Description: RDS DB Address and port
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 170.10.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: demo-vpc
+  SubnetA:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 170.10.1.0/24
+      Tags:
+        - Key: Name
+          Value: demo-SubnetA
+      VpcId: !Ref VPC
+      AvailabilityZone: !Join 
+        - ''
+        - - !Ref 'AWS::Region'
+          - a
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: d7675b98-6b22-40b0-9307-fb10eccda4b3
+  SubnetB:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 170.10.2.0/24
+      Tags:
+        - Key: Name
+          Value: demo-SubnetB
+      VpcId: !Ref VPC
+      AvailabilityZone: !Join 
+        - ''
+        - - !Ref 'AWS::Region'
+          - b
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: b09ad6bb-6234-45e2-a313-5babf315e465
+  VPCInternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  PublicRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+  PublicRoute:
+    Type: 'AWS::EC2::Route'
+    DependsOn: VPCInternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  SubnetAPublicRouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref SubnetA
+  SubnetBPublicRouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref SubnetB
+  # S3Bucket:
+  #   Type: 'AWS::S3::Bucket'
+  #   Properties:
+  #     AccessControl: PublicRead
+  #     BucketName: !Ref S3BucketName
+  #     WebsiteConfiguration:
+  #       IndexDocument: index.html
+  #       ErrorDocument: index.html
+  #   DeletionPolicy: Retain
+  #   Metadata:
+  #     'AWS::CloudFormation::Designer':
+  #       id: 3b83a92f-2767-4559-8953-9d1051dc95e0
+  # BucketPolicy:
+  #   Type: 'AWS::S3::BucketPolicy'
+  #   Properties:
+  #     PolicyDocument:
+  #       Id: S3policy
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Sid: PublicReadForGetBucketObjects
+  #           Effect: Allow
+  #           Principal: '*'
+  #           Action: 's3:GetObject'
+  #           Resource: !Join 
+  #             - ''
+  #             - - 'arn:aws:s3:::'
+  #               - !Ref S3Bucket
+  #               - /*
+  #     Bucket: !Ref S3Bucket
+  RDSSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: SG to allow internal access to RDS instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: !Ref RDSSGCidr
+      VpcId:
+        Ref: VPC
+  DBSubnetGroup:
+    Type: 'AWS::RDS::DBSubnetGroup'
+    Properties:
+      DBSubnetGroupDescription: DBSubnetGroup for RDS MySql instance
+      DBSubnetGroupName: demo-DBSunetGroup
+      SubnetIds:
+        - !Ref SubnetA
+        - !Ref SubnetB
+  RDS:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      DBName: !Ref DBName
+      AllocatedStorage: '5'
+      DBInstanceClass: !Ref DBInstanceClass
+      Engine: MYSQL
+      EngineVersion: !Ref DBEngineVersion
+      MasterUsername: !Ref DBUser
+      MasterUserPassword: !Ref DBPassword
+      DBParameterGroupName: !Ref RDSParamGroup
+      PubliclyAccessible: true
+      StorageType: gp2
+      Port: 3306
+      StorageEncrypted: true
+      VPCSecurityGroups:
+        - !Ref RDSSecurityGroup
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      MaxAllocatedStorage: 1000
+      Tags:
+        - Key: Name
+          Value: immersion-day-database
+        - Key: createdBy
+          Value: Bansi Delwadia
+  RDSParamGroup:
+    Type: 'AWS::RDS::DBParameterGroup'
+    Properties:
+      Family: !Ref RDSParamGroupFamily
+      Description: CloudFormation Database Parameter Group
+      Parameters:
+        autocommit: '1'
+        general_log: '1'
+        sql_mode: IGNORE_SPACE
+        max_allowed_packet: 16384
+        innodb_buffer_pool_size: '{DBInstanceClassMemory*3/4}'
+  Cognitouserpool:
+    Type: 'AWS::Cognito::UserPool'
+    Properties:
+      UsernameConfiguration: 
+        CaseSensitive: false
+      AutoVerifiedAttributes:
+        - email
+      # AliasAttributes:
+      #   - email
+      UsernameAttributes: 
+        - email
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+        - Name: name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+  S3Bucket:
+    DeletionPolicy: 'Delete'
+    Metadata:
+      Comment: 'Bucket to store some data'
+    Properties:
+      AccessControl: 'Private'
+      BucketName: !Sub 'cf-simple-s3-origin-${AWS::StackName}-${AWS::AccountId}'
+      WebsiteConfiguration:
+        ErrorDocument: "index.html"
+        IndexDocument: "index.html"
+    Type: 'AWS::S3::Bucket'
+
+  S3BucketPolicy:
+    Metadata:
+      Comment: 'Bucket policy to allow cloudfront to access the data'
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetObject'
+            Effect: 'Allow'
+            Principal:
+              CanonicalUser: !GetAtt CfOriginAccessIdentity.S3CanonicalUserId
+            Resource:
+              - !Sub 'arn:aws:s3:::${S3Bucket}/*'
+    Type: 'AWS::S3::BucketPolicy'
+
+  CfDistribution:
+    Metadata:
+      Comment: 'A simple CloudFront distribution with an S3 origin'
+    Properties:
+      DistributionConfig:
+        Comment: 'A simple distribution with an S3 origin'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - 'HEAD'
+            - 'GET'
+          CachedMethods:
+            - 'HEAD'
+            - 'GET'
+          Compress: false
+          DefaultTTL: 86400
+          ForwardedValues:
+            Cookies:
+              Forward: 'none'
+            Headers:
+              - 'Origin'
+            QueryString: false
+          MaxTTL: 31536000
+          MinTTL: 86400
+          TargetOriginId: !Sub 's3-origin-${S3Bucket}'
+          ViewerProtocolPolicy: 'redirect-to-https'
+        DefaultRootObject: 'index.html'
+        Enabled: true
+        HttpVersion: 'http1.1'
+        IPV6Enabled: false
+        Origins:
+          - DomainName: !GetAtt S3Bucket.DomainName
+            Id: !Sub 's3-origin-${S3Bucket}'
+            OriginPath: ''
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CfOriginAccessIdentity}'
+        PriceClass: 'PriceClass_All'
+    Type: 'AWS::CloudFront::Distribution'
+
+  CfOriginAccessIdentity:
+    Metadata:
+      Comment: 'Access S3 bucket content only through CloudFront'
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: 'Access S3 bucket content only through CloudFront'
+    Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
