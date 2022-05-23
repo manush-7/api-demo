@@ -1,8 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
-  # S3BucketName:
-  #   Type: String
-  #   Description: Name of S3 Bucket that will be created
   DBName:
     Default: AGTtest
     Description: The database name
@@ -157,35 +154,6 @@ Resources:
     Properties:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref SubnetB
-  # S3Bucket:
-  #   Type: 'AWS::S3::Bucket'
-  #   Properties:
-  #     AccessControl: PublicRead
-  #     BucketName: !Ref S3BucketName
-  #     WebsiteConfiguration:
-  #       IndexDocument: index.html
-  #       ErrorDocument: index.html
-  #   DeletionPolicy: Retain
-  #   Metadata:
-  #     'AWS::CloudFormation::Designer':
-  #       id: 3b83a92f-2767-4559-8953-9d1051dc95e0
-  # BucketPolicy:
-  #   Type: 'AWS::S3::BucketPolicy'
-  #   Properties:
-  #     PolicyDocument:
-  #       Id: S3policy
-  #       Version: 2012-10-17
-  #       Statement:
-  #         - Sid: PublicReadForGetBucketObjects
-  #           Effect: Allow
-  #           Principal: '*'
-  #           Action: 's3:GetObject'
-  #           Resource: !Join 
-  #             - ''
-  #             - - 'arn:aws:s3:::'
-  #               - !Ref S3Bucket
-  #               - /*
-  #     Bucket: !Ref S3Bucket
   RDSSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
