@@ -26,7 +26,7 @@ This step will create the necessary resources for workshop.
 
 1. Once stack is fully deployed, click on the `immersion-day-workshop-[random-string]` stack. Under **Outputs**, note the **Cloudfront** value. You will need this later. 
 
-### 3. Create and test the Lambda that will insert data to RDS
+### 2. Create and test the Lambda that will insert data to RDS
 
 **Step-by-step instructions**
 
@@ -55,7 +55,7 @@ This step will create the necessary resources for workshop.
 1. Select the test you just created and saved and click the **Test** button.
 1. If there were no errors, then the data we wanted to insert should have made to database. 
 
-### 4. Create and test the Lambda that will extract data from RDS to S3
+### 3. Create and test the Lambda that will extract data from RDS to S3
 
 **Step-by-step instructions**
 
