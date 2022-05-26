@@ -125,19 +125,19 @@ If this is not your first time using API Gateway, choose Create API. Under REST 
 ### 5. Deploy and test the API
 Deploy the API in the API Gateway console
 
-1.Choose Deploy API from the Actions dropdown menu.
+1. Choose Deploy API from the Actions dropdown menu.
 
-2. For Deployment stage, choose [new stage].
+1. For Deployment stage, choose [new stage].
 
-3. For Stage name, enter test.
+1. For Stage name, enter test.
 
-4. If desired, enter a Stage description.
+1. If desired, enter a Stage description.
 
-5. If desired, enter a Deployment description.
+1. If desired, enter a Deployment description.
 
-6. Choose Deploy.
+1. Choose Deploy.
 
-7. Note the API's Invoke URL.
+1. Note the API's Invoke URL.
 
 ### 6. Use browser and Postman to test an API with Lambda proxy integration
 
