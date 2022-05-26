@@ -97,30 +97,30 @@ If this is not your first time using API Gateway, choose Create API. Under REST 
 1. Create an empty API as follows:
    1. Under Create new API, choose New API.
    2. Under Settings:
-    1. For API name, enter LambdaSimpleProxy.
-    2. If desired, enter a description in the Description field; otherwise, leave it empty.
-    3. Leave Endpoint Type set to Regional.
+      1. For API name, enter LambdaSimpleProxy.
+      2. If desired, enter a description in the Description field; otherwise, leave it empty.
+      3. Leave Endpoint Type set to Regional.
    3. Choose Create API.
    4. Create the **s3tords** resource as follows:
-    1. Choose the root resource (/) in the Resources tree.
-    2. Choose Create Resource from the Actions dropdown menu.
-    3. Leave Configure as proxy resource unchecked.
-    4. For Resource Name, enter **s3tords**.
-    5. Leave Resource Path set to /s3tords.
-    6. Leave Enable API Gateway CORS checked. 
-    7. Choose Create Resource.
+        1. Choose the root resource (/) in the Resources tree.
+        2. Choose Create Resource from the Actions dropdown menu.
+        3. Leave Configure as proxy resource unchecked.
+        4. For Resource Name, enter **s3tords**.
+        5. Leave Resource Path set to /s3tords.
+        6. Leave Enable API Gateway CORS checked. 
+        7. Choose Create Resource.
    5. In a proxy integration, the entire request is sent to the backend Lambda function as-is, via a catch-all ANY method that represents any HTTP method.  The actual HTTP method is specified by the client at run time. The ANY method allows you to use a single API method setup for all of the supported HTTP methods: DELETE, GET, HEAD, OPTIONS, PATCH, POST, and PUT.
-    1. To set up the GET method, do the following:
-    2. In the Resources list, choose /s3tords.
-    3. In the Actions menu, choose Create method.
-    4. Choose GET from the dropdown menu, and choose the checkmark icon
-    5. Leave the Integration type set to Lambda Function.
-    6. Choose Use Lambda Proxy integration.
-    7. From the Lambda Region dropdown menu, choose the region where you created the Lambda function.
-    8. In the Lambda Function field, type any character and choose from the dropdown menu.
-    9. Leave Use Default Timeout checked.
-    10. Choose Save.
-    11. Choose OK when prompted with Add Permission to Lambda Function.
+        1. To set up the GET method, do the following:
+        2. In the Resources list, choose /s3tords.
+        3. In the Actions menu, choose Create method.
+        4. Choose GET from the dropdown menu, and choose the checkmark icon
+        5. Leave the Integration type set to Lambda Function.
+        6. Choose Use Lambda Proxy integration.
+        7. From the Lambda Region dropdown menu, choose the region where you created the Lambda function.
+        8. In the Lambda Function field, type any character and choose from the dropdown menu.
+        9. Leave Use Default Timeout checked.
+        10. Choose Save.
+        11. Choose OK when prompted with Add Permission to Lambda Function.
 
 ### 5. Deploy and test the API
 Deploy the API in the API Gateway console
