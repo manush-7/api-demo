@@ -97,9 +97,9 @@ If this is not your first time using API Gateway, choose Create API. Under REST 
 1. Create an empty API as follows:
    1. Under Create new API, choose New API.
    2. Under Settings:
-      1. For API name, enter LambdaSimpleProxy.
-      2. If desired, enter a description in the Description field; otherwise, leave it empty.
-      3. Leave Endpoint Type set to Regional.
+        1. For API name, enter LambdaSimpleProxy.
+        2. If desired, enter a description in the Description field; otherwise, leave it empty.
+        3. Leave Endpoint Type set to Regional.
    3. Choose Create API.
    4. Create the **s3tords** resource as follows:
         1. Choose the root resource (/) in the Resources tree.
@@ -125,25 +125,63 @@ If this is not your first time using API Gateway, choose Create API. Under REST 
 ### 5. Deploy and test the API
 Deploy the API in the API Gateway console
 
-1. Choose Deploy API from the Actions dropdown menu.
+1. Install the serverless CLI via NPM:
+   `npm install -g serverless`
+   2. Under Settings:
+        1. For API name, enter LambdaSimpleProxy.
+        2. If desired, enter a description in the Description field; otherwise, leave it empty.
+        3. Leave Endpoint Type set to Regional.
+2. Choose Deploy API from the Actions dropdown menu.
 
-1. For Deployment stage, choose [new stage].
+3. For Deployment stage, choose [new stage].
 
-1. For Stage name, enter test.
+4. For Stage name, enter test.
 
-1. If desired, enter a Stage description.
+5. If desired, enter a Stage description.
 
-1. If desired, enter a Deployment description.
+6. If desired, enter a Deployment description.
 
-1. Choose Deploy.
+7. Choose Deploy.
 
-1. Note the API's Invoke URL.
+8. Note the API's Invoke URL.
 
 ### 6. Use browser and Postman to test an API with Lambda proxy integration
 
 1. To test GET requests using only query string parameters, you can type the URL for the API's s3tords resource into a browser address bar. For example: https://r275xc9bmd.execute-api.us-east-1.amazonaws.com/test/s3tords?bucket_name=paccar-test-mysql-to-s3&file_name=testfile.csv
 
 1. For other methods, you must use more advanced REST API testing utilities, such as POSTMAN or cURL.
+
+### 7. Lets Setup this with Serverless
+Get started with Serverless Framework’s open-source CLI and AWS in minutes.
+
+1. Install the serverless CLI via NPM:
+   `npm install -g serverless`
+   
+    Note: If you don’t already have Node on your machine, install it first. If you don't want to install Node or NPM, you can install serverless as a standalone binary.
+
+2. Run this command to quickly set and view your credentials, Region, and output format. 
+   `aws configure`
+    
+    The following example shows sample values.
+<!--     <img width="684" alt="image" src="https://user-images.githubusercontent.com/58434120/170480884-40e32d10-d137-41a3-9e5c-b85ae891825d.png"> -->
+
+        $ aws configure
+        AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+        AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+        Default region name [None]: us-west-2
+        Default output format [None]: json
+        
+3. To create your first project, run the command below and follow the prompts:
+   `serverless`
+     
+4. Move into the newly created directory
+   `cd your-service-name`
+ 
+5. Now Install Demo example using GitHub URL
+   `serverless --template-url=https://github.com/serverless/examples/tree/v3/...`
+
+6. Deploy the project at any time by running command:
+   `serverless deploy`
 
 ## Completion
 
