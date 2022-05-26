@@ -125,25 +125,19 @@ If this is not your first time using API Gateway, choose Create API. Under REST 
 ### 5. Deploy and test the API
 Deploy the API in the API Gateway console
 
-1. Install the serverless CLI via NPM:
-   `npm install -g serverless`
-   2. Under Settings:
-        1. For API name, enter LambdaSimpleProxy.
-        2. If desired, enter a description in the Description field; otherwise, leave it empty.
-        3. Leave Endpoint Type set to Regional.
-2. Choose Deploy API from the Actions dropdown menu.
+1.Choose Deploy API from the Actions dropdown menu.
 
-3. For Deployment stage, choose [new stage].
+2. For Deployment stage, choose [new stage].
 
-4. For Stage name, enter test.
+3. For Stage name, enter test.
 
-5. If desired, enter a Stage description.
+4. If desired, enter a Stage description.
 
-6. If desired, enter a Deployment description.
+5. If desired, enter a Deployment description.
 
-7. Choose Deploy.
+6. Choose Deploy.
 
-8. Note the API's Invoke URL.
+7. Note the API's Invoke URL.
 
 ### 6. Use browser and Postman to test an API with Lambda proxy integration
 
