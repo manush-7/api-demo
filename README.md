@@ -170,18 +170,14 @@ Get started with Serverless Framework’s open-source CLI and AWS in minutes.
         AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
         Default region name [None]: us-west-2
         Default output format [None]: json
-        
-3. To create your first project, run the command below and follow the prompts:
-   `serverless`
-     
-4. Move into the newly created directory
-   `cd your-service-name`
- 
-5. Now Install Demo example using GitHub URL
-   `serverless --template-url=https://github.com/serverless/examples/tree/v3/...`
+       
+3. Now clone Demo example using GitHub URL
+   `https://github.com/manush-7/api-demo.git`
 
-6. Deploy the project at any time by running command:
-   `serverless deploy`
+4. To navigate to your project folder **api-demo/ServerlessFramework-API/**.
+
+5. Deploy the project at any time by running command:
+   `serverless deploy or sls deploy`
 
 ## Completion
 
@@ -203,4 +199,4 @@ Select the configuration you created manually and hit the **Delete** button to r
 Select the Lambda Functions that you created manually and hit the **Delete** button to remove the functions. 
 
 ### Serverless Framework 
-Run Command ```sls destroy```
+Run Command ```sls remove```
