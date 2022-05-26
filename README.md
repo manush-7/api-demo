@@ -156,7 +156,7 @@ Congratulations! You've successfully created a API with Lambda function that ins
 Select and delete the CloudFormation templates deployed as part of the prerequisites. This will clean up all the resources created by the template. 
 
 ### S3 Bucket
-Select the S3 bucket created by CloufFormation and delete it. 
+Select the S3 bucket created by CloudFormation and delete it. 
 
 ### AWS API Gateway
 Select the configuration you created manually and hit the **Delete** button to remove the configuration.
