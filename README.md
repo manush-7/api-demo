@@ -142,7 +142,8 @@ Deploy the API in the API Gateway console
 ### 6. Use browser and Postman to test an API with Lambda proxy integration
 
 1. To test GET requests using only query string parameters, you can type the URL for the API's s3tords resource into a browser address bar. 
-For example: https://r275xc9bmd.execute-api.us-east-1.amazonaws.com/test/s3tords?bucket_name=paccar-test-mysql-to-s3&file_name=testfile.csv
+
+    For example: https://r275xc9bmd.execute-api.us-east-1.amazonaws.com/test/s3tords?bucket_name=paccar-test-mysql-to-s3&file_name=testfile.csv
 
 1. For other methods, you must use more advanced REST API testing utilities, such as POSTMAN or cURL.
 
