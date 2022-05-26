@@ -5,7 +5,8 @@ This module will show you how to create API gateway, how to create a proxy lambd
 ### 1. Deploy the workshop CloudFormation template
 This step will create the necessary resources for workshop. 
 
-<img width="650" alt="image" src="https://user-images.githubusercontent.com/58434120/169806983-9292c3ca-ad59-40fd-a101-e7db3e6ed706.png">
+<!-- <img width="650" alt="image" src="https://user-images.githubusercontent.com/58434120/169806983-9292c3ca-ad59-40fd-a101-e7db3e6ed706.png"> -->
+<img width="550" alt="image" src="https://user-images.githubusercontent.com/58434120/170464691-4aab1105-713b-47a0-91a6-01bd62c3db43.png">
 
 **Step-by-step instructions**
 
