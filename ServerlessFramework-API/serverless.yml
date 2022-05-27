@@ -39,6 +39,7 @@ functions:
       - http:
           method: get
           path: rdstos3
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -49,6 +50,7 @@ functions:
       - http:
           method: get
           path: s3tords
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

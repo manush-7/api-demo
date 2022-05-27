@@ -98,6 +98,13 @@
     <script>
       function submitDateForm() {
         var date = $('#date').val();
+        var data = window.location.href;
+        console.log(data)
+        var parameter = data.split("#");
+        console.log(parameter)
+        var res = parameter[1].split("&");
+        var tokenData = res[0].split("id_token=")[1];
+        console.log("tokenData", tokenData);
         $.ajax({
           url: `https://3fzkedpbb1.execute-api.us-west-2.amazonaws.com/dev/rdstos3?date=${date}`,
           type: 'GET',
@@ -107,9 +114,7 @@
           crossDomain: true,
           headers: {
             'Access-Control-Allow-Origin': '*',
-          },
-          beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + tokenData);
+            "Authorization": "Bearer " + tokenData 
           },
           success: function (data) {
             console.log(data);

@@ -42,6 +42,7 @@ def write_s3(Bucket,Prefix,Source,Sink):
 
 def extract(event, bucket):
     print(' ## STARTING OF HANDLER FUNCTION ##')
+    print(event)
     date = event["queryStringParameters"]["date"]
     print(date)
     global connection, file_time_format,logger_info
@@ -86,7 +87,12 @@ def extract(event, bucket):
             Source = csv_out, \
             Sink= 'rds_to_s3/output/'+ final_output_filename+'.txt')
             return {
-                'statusCode': 200
+                'statusCode': 200,
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': 'true',
+                    'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+                },
             }   
     except Exception as e:
         logger.error(e)
